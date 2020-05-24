@@ -36,9 +36,7 @@ class ElasticInitializer(
         var line: String?
         var fileReader: ReversedLinesFileReader? = null
         try {
-            val fileUri = ElasticInitializer::class.java.classLoader.getResource("migration.csv")?.toURI()
-                    ?: throw IllegalStateException("Migration file is not exist")
-            fileReader = ReversedLinesFileReader(File(fileUri), Charset.defaultCharset())
+            fileReader = ReversedLinesFileReader(File("/opt/app/migration.csv"), Charset.defaultCharset())
             val reviewDataSet = mutableSetOf<Review>()
             var reviewText = ""
             line = fileReader.readLine()

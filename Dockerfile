@@ -7,6 +7,7 @@ RUN apk update && apk add bash nodejs npm python
 RUN mkdir -p /opt/app
 ENV PROJECT_HOME /opt/app
 COPY build/libs/wechallenge-1.0.jar $PROJECT_HOME/wechallenge.jar
+COPY migration.csv $PROJECT_HOME/migration.csv
 
 #Fronend
 RUN mkdir -p $PROJECT_HOME/web
