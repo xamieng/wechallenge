@@ -22,8 +22,8 @@ class ESConfiguration {
     @Bean
     fun client(): Client {
         val settings = Settings.builder()
-                .put("path.home", "/usr/local/Cellar/elasticsearch/7.7.0")
-                .put("cluster.name", "docker-cluster").build()
+                .put("cluster.name", "docker-cluster")
+                .put("node.name", "es01").build()
         val client = PreBuiltTransportClient(settings)
         client.addTransportAddress(TransportAddress(InetAddress.getByName("localhost"), 9300))
         return client
