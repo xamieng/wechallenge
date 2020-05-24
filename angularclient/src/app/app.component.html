@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card bg-dark my-5">
+        <div class="card-body">
+          <h2 class="card-title text-center text-white py-3">{{ title }}</h2>
+          <ul class="text-center list-inline py-3">
+            <li class="list-inline-item">
+              <label for="reviewId"></label>
+              <input type="text" [(ngModel)]="reviewId" class="form-control" id="reviewId" name="reviewId" placeholder="Enter review id">
+            </li>
+            <li class="list-inline-item">
+              <a [routerLink]="['/review', reviewId]" class="btn btn-info">Search</a>
+            </li>
+          </ul>
+          <ul class="text-center list-inline py-3">
+            <li class="list-inline-item">
+              <label for="keyword"></label>
+              <input type="text" [(ngModel)]="keyword" class="form-control" id="keyword" name="keyword" placeholder="Enter keyword">
+            </li>
+            <li class="list-inline-item">
+              <a [routerLink]="['/search', keyword]" class="btn btn-info">Search</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

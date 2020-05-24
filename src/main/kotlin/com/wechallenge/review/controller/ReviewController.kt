@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
 
 @RestController
+@CrossOrigin(origins = ["http://localhost:5555"])
 @RequestMapping("/reviews")
 class ReviewController(
         private val reviewService: ReviewService,

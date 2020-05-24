@@ -1,0 +1,20 @@
+<div class="card my-5">
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th width="15%">Review ID</th>
+        <th scope="col">Review</th>
+        <th width="15%">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let review of reviews">
+        <td>{{ review.reviewId }}</td>
+        <td>{{ review.review }}</td>
+        <td><a [routerLink]="['/review/edit', review.reviewId]" class="btn btn-warning">Edit</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
