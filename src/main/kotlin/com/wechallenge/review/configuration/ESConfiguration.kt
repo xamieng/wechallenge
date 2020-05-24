@@ -25,7 +25,7 @@ class ESConfiguration {
                 .put("cluster.name", "docker-cluster")
                 .put("node.name", "es01").build()
         val client = PreBuiltTransportClient(settings)
-        client.addTransportAddress(TransportAddress(InetAddress.getByName("localhost"), 9300))
+        client.addTransportAddress(TransportAddress(InetAddress.getByName("elasticsearch"), 9300))
         return client
     }
 

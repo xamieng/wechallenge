@@ -8,11 +8,12 @@ plugins {
 }
 
 group = "com.wechallenge"
-version = "0.0.1-SNAPSHOT"
+version = "1.0"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	mavenCentral()
+	maven ("https://artifacts.elastic.co/maven" )
 }
 
 dependencies {
@@ -25,6 +26,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.elasticsearch.client:x-pack-transport:5.6.1")
+	implementation("commons-io:commons-io:2.6")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
