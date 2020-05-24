@@ -29,9 +29,7 @@ dependencies {
 	implementation("org.elasticsearch.client:x-pack-transport:5.6.1")
 	implementation("commons-io:commons-io:2.6")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-	}
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<Test> {
