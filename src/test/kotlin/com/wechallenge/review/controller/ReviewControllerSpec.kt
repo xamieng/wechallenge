@@ -1,8 +1,10 @@
 package com.wechallenge.review.controller
 
 import com.wechallenge.review.assembler.ReviewAssembler
+import com.wechallenge.review.domain.Keyword
 import com.wechallenge.review.domain.Review
 import com.wechallenge.review.dto.UpdateReviewDTO
+import com.wechallenge.review.service.KeywordService
 import com.wechallenge.review.service.ReviewService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -20,14 +22,15 @@ import org.springframework.http.HttpStatus
 @Suppress("DEPRECATION")
 @RunWith(MockitoJUnitRunner::class)
 class ReviewControllerSpec {
-    @Mock
-    lateinit var reviewService: ReviewService
-    var reviewAssembler = ReviewAssembler()
-    lateinit var reviewController: ReviewController
+
+    @Mock private lateinit var reviewService: ReviewService
+    @Mock private lateinit var keywordService: KeywordService
+    private var reviewAssembler = ReviewAssembler()
+    private lateinit var reviewController: ReviewController
 
     @Before
     fun setup() {
-        reviewController = ReviewController(reviewService, reviewAssembler)
+        reviewController = ReviewController(reviewService, keywordService, reviewAssembler)
     }
 
     @Test
@@ -58,6 +61,8 @@ class ReviewControllerSpec {
     fun testSearchReviewByFoodText_when_success() {
         `when`(reviewService.searchReviewByFoodText("test", Pageable.unpaged()))
                 .thenReturn(getMockSearchHits())
+        `when`(keywordService.getKeyword("test"))
+                .thenReturn(getMockKeyword())
 
         val actual = reviewController.searchReviewByFoodText("test", Pageable.unpaged())
         val actualBody = actual.body
@@ -70,17 +75,21 @@ class ReviewControllerSpec {
     }
 
     @Test
-    fun testSearchReviewByFoodText_when_not_found() {
+    fun testSearchReviewByFoodText_when_review_not_found() {
         `when`(reviewService.searchReviewByFoodText("test", Pageable.unpaged()))
                 .thenReturn(listOf())
+        `when`(keywordService.getKeyword("test"))
+                .thenReturn(getMockKeyword())
 
         val actual = reviewController.searchReviewByFoodText("test", Pageable.unpaged())
-        val actualBody = actual.body
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatus.OK)
-        actualBody?.let {
-            assertThat(it.size).isEqualTo(0)
-        }
+        assertThat(actual.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+    }
+
+    @Test
+    fun testSearchReviewByFoodText_when_keyword_not_found() {
+        val actual = reviewController.searchReviewByFoodText("test", Pageable.unpaged())
+        assertThat(actual.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -133,6 +142,13 @@ class ReviewControllerSpec {
         review.reviewId = 1
         review.review = "updated"
         return review
+    }
+
+    private fun getMockKeyword(): Keyword {
+        val keyword = Keyword()
+        keyword.keyword = "test"
+        keyword.id = "mock"
+        return keyword
     }
 
     private fun <T> anyObject(): T {

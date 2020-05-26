@@ -1,6 +1,7 @@
 package com.wechallenge.review.service
 
 import com.wechallenge.review.domain.Review
+import com.wechallenge.review.dto.UpdateReviewDTO
 import com.wechallenge.review.repository.ReviewRepository
 import org.assertj.core.api.Assertions
 import org.junit.Before
@@ -8,16 +9,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.data.domain.Pageable
 import org.springframework.data.elasticsearch.core.SearchHit
 
+@Suppress("DEPRECATION")
 @RunWith(MockitoJUnitRunner::class)
 class ReviewServiceSpec {
     @Mock
-    lateinit var reviewRepository: ReviewRepository
-    lateinit var reviewService: ReviewService
+    private lateinit var reviewRepository: ReviewRepository
+    private lateinit var reviewService: ReviewService
 
     @Before
     fun setup() {
@@ -67,6 +70,16 @@ class ReviewServiceSpec {
         Assertions.assertThat(actual.size).isEqualTo(0)
     }
 
+    @Test
+    fun testUpdateReview_when_success() {
+        `when`(reviewRepository.save(anyObject<Review>())).thenReturn(getMockReview())
+
+        val actual = reviewService.updateReview(getMockReview(), getMockUpdatedReviewDTO())
+
+        Assertions.assertThat(actual.reviewId).isEqualTo(1)
+        Assertions.assertThat(actual.review).isEqualTo("review")
+    }
+
     private fun getMockReview(): Review {
         val review = Review()
         review.id = "id"
@@ -79,6 +92,16 @@ class ReviewServiceSpec {
         val review = getMockReview()
         val highLightMap = mutableMapOf("review" to listOf("<keyword>review</keyword>"))
         return listOf(SearchHit<Review>("mockId", 2.toFloat(), null, highLightMap, review))
+    }
+
+    private fun getMockUpdatedReviewDTO(): UpdateReviewDTO {
+        val review = UpdateReviewDTO()
+        review.review = "updated"
+        return review
+    }
+
+    private fun <T> anyObject(): T {
+        return Mockito.anyObject()
     }
 
 }

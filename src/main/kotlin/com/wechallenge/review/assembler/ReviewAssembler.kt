@@ -22,11 +22,4 @@ class ReviewAssembler {
         }
         return dto
     }
-
-    fun assembleDomain(dto: ReviewDTO): Review {
-        val review = Review()
-        review.reviewId = dto.reviewId
-        review.review = dto.review
-        return review
-    }
 }

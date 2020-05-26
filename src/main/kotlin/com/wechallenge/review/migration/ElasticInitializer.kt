@@ -44,7 +44,7 @@ class ElasticInitializer(
         var line: String?
         var fileReader: ReversedLinesFileReader? = null
         try {
-            val filePath = System.getenv("REVIEW_PATH") ?: ElasticInitializer::class.java.getResource("review.csv").readText()
+            val filePath = System.getenv("REVIEW_PATH") ?: "src/main/resources/review.csv"
             fileReader = ReversedLinesFileReader(File(filePath), Charset.defaultCharset())
             val reviewDataSet = mutableSetOf<Review>()
             var reviewText = ""
@@ -88,7 +88,7 @@ class ElasticInitializer(
         var line: String?
         var fileReader: ReversedLinesFileReader? = null
         try {
-            val filePath = System.getenv("KEYWORD_PATH") ?: ElasticInitializer::class.java.getResource("keyword.txt").readText()
+            val filePath = System.getenv("KEYWORD_PATH") ?: "src/main/resources/keyword.txt"
             fileReader = ReversedLinesFileReader(File(filePath), Charset.defaultCharset())
             val keywordDataSet = mutableSetOf<Keyword>()
             line = fileReader.readLine()
