@@ -4,6 +4,8 @@ import com.wechallenge.review.domain.Review
 import com.wechallenge.review.dto.UpdateReviewDTO
 import com.wechallenge.review.repository.ReviewRepository
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Pageable
 import org.springframework.data.elasticsearch.core.SearchHit
 import org.springframework.stereotype.Service
@@ -18,6 +20,7 @@ class ReviewService (
     private val logger = LoggerFactory.getLogger(ReviewService::class.java)
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = ["review"], key = "#reviewId")
     fun getReviewById(reviewId: Int): Review? {
         logger.debug("getReviewById: $reviewId")
         return reviewRepository.findOneByReviewId(reviewId)
@@ -30,6 +33,7 @@ class ReviewService (
     }
 
     @Transactional
+    @CacheEvict(cacheNames = ["review"], key = "#review.reviewId")
     fun updateReview(review: Review, dto: UpdateReviewDTO): Review {
         logger.debug("updateReview: $review with $dto")
         review.review = dto.review

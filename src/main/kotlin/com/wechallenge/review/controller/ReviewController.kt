@@ -3,6 +3,7 @@ package com.wechallenge.review.controller
 import com.wechallenge.review.assembler.ReviewAssembler
 import com.wechallenge.review.dto.ReviewDTO
 import com.wechallenge.review.dto.UpdateReviewDTO
+import com.wechallenge.review.service.KeywordService
 import com.wechallenge.review.service.ReviewService
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
 
@@ -19,6 +19,7 @@ import springfox.documentation.annotations.ApiIgnore
 @RequestMapping("/reviews")
 class ReviewController(
         private val reviewService: ReviewService,
+        private val keywordService: KeywordService,
         private val reviewAssembler: ReviewAssembler
 ) {
 
@@ -39,10 +40,17 @@ class ReviewController(
             ApiImplicitParam(name = "page", value = "Page number", defaultValue = "0", paramType = "query", dataType = "int")
     )
     fun searchReviewByFoodText(
-            @RequestParam("query") query: String,
+            @RequestParam("query") keyword: String,
             @ApiIgnore pageable: Pageable): ResponseEntity<List<ReviewDTO>> {
-        logger.info("REST request to search review by food text: $query")
-        val reviews = reviewService.searchReviewByFoodText(query, pageable)
+        logger.info("REST request to search review by food text: $keyword")
+        // validate search keyword
+        keywordService.getKeyword(keyword) ?: return ResponseEntity(HttpStatus.BAD_REQUEST)
+
+        // search
+        val reviews = reviewService.searchReviewByFoodText(keyword, pageable)
+        if (reviews.isEmpty()) return ResponseEntity(HttpStatus.NOT_FOUND)
+
+        // assemble
         val reviewDtos = reviews.map { reviewAssembler.assembleDTO(it) }
         return ResponseEntity.ok(reviewDtos)
     }

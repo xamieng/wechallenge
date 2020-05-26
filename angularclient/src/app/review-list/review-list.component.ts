@@ -18,9 +18,9 @@ export class ReviewListComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       let keyword = params["keyword"]
-      this.reviewService.search(keyword).subscribe(data => {
-        this.reviews = data;
-      }, () => alert("Search not found:" + keyword))
+      this.reviewService.search(keyword).subscribe(
+        data => this.reviews = data,
+        () => alert("Search not found: " + keyword))
     });
   }
 }
