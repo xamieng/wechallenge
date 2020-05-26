@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.elasticsearch.client:x-pack-transport:5.6.1")
 	implementation("commons-io:commons-io:2.6")
+	implementation("org.springframework.boot:spring-boot-starter-cache:2.3.0.RELEASE")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
